@@ -1,0 +1,25 @@
+{{ form_start(form) }}
+
+<div class="card">
+
+    <div class="card-body">
+
+        {{ form_row(form.name) }}
+
+        {{ form_row(form.email) }}
+
+        {{ form_row(form.phone) }}
+
+    </div>
+
+    <div class="card-footer">
+
+        <button class="btn btn-success">
+            {{ button_label|default('Save') }}
+        </button>
+
+    </div>
+
+</div>
+
+{{ form_end(form) }}
