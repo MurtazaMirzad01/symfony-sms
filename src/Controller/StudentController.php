@@ -90,8 +90,6 @@ final class StudentController extends AbstractController
                 )
             );
 
-            $this->addFlash('success', 'Saved');
-
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -151,9 +149,6 @@ final class StudentController extends AbstractController
             $dispatcher->dispatch(
                 new StudentDeletedEvent($student)
             );
-
-            $this->addFlash('danger', 'Error');
-
         }
 
         return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
