@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Student;
+use App\Event\StudentDeletedEvent;
 use App\Form\StudentType;
 use App\Form\StudentSearchType;
 use App\Repository\StudentRepository;
@@ -137,11 +138,19 @@ final class StudentController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_student_delete', methods: ['POST'])]
-    public function delete(Request $request, Student $student, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request,
+       Student $student,
+       EntityManagerInterface $entityManager,
+        EventDispatcherInterface $dispatcher
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($student);
             $entityManager->flush();
+
+            $dispatcher->dispatch(
+                new StudentDeletedEvent($student)
+            );
 
             $this->addFlash('danger', 'Error');
 
