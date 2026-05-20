@@ -13,6 +13,8 @@ use App\Service\Student\StudentSummaryService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Event\StudentCreatedEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 #[Route('/')]
 final class StudentController extends AbstractController
@@ -67,7 +69,11 @@ final class StudentController extends AbstractController
     }
 
     #[Route('/new', name: 'app_student_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $dispatcher
+    ): Response
     {
         $student = new Student();
         $form = $this->createForm(StudentType::class, $student);
@@ -76,6 +82,12 @@ final class StudentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($student);
             $entityManager->flush();
+
+            $dispatcher->dispatch(
+                new StudentCreatedEvent(
+                    $student
+                )
+            );
 
             $this->addFlash('success', 'Saved');
 
