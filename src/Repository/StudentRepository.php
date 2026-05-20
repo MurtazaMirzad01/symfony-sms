@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -31,6 +32,41 @@ class StudentRepository extends ServiceEntityRepository
             'DESC'
         )->getquery()
             ->getResult();
+    }
+
+    public function searchQuery(
+        ?string $query = null,
+    ):QueryBuilder
+    {
+        $qb= $this->createQueryBuilder('s');
+
+        if ($query) {
+
+            $qb
+                ->andWhere(
+                    '
+                LOWER(s.name)
+                LIKE :query
+
+                OR LOWER(s.email)
+                LIKE :query
+                '
+                )
+
+                ->setParameter(
+                    'query',
+                    '%'
+                    .
+                    mb_strtolower(
+                        $query
+                    )
+                    .
+                    '%'
+                );
+        }
+
+        return $qb
+            ->orderBy('s.createdAt', 'DESC');
     }
 
 

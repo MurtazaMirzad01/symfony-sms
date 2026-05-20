@@ -7,12 +7,14 @@ use App\Form\StudentType;
 use App\Form\StudentSearchType;
 use App\Repository\StudentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/student')]
+#[Route('/')]
 final class StudentController extends AbstractController
 {
     #[Route(
@@ -22,7 +24,8 @@ final class StudentController extends AbstractController
     )]
     public function index(
         Request $request,
-        StudentRepository $repository
+        StudentRepository $repository,
+        PaginatorInterface $paginator
     ): Response {
 
         $form = $this->createForm(
@@ -35,14 +38,28 @@ final class StudentController extends AbstractController
             $form->get('query')
                 ->getData();
 
+        $students =
+            $paginator
+                ->paginate(
+                    $repository
+                        ->searchQuery(
+                            $query
+                        ),
+
+                    $request
+                        ->query
+                        ->getInt(
+                            'page',
+                            1
+                        ),
+
+                    10
+                );
+
         return $this->render(
             'student/index.html.twig',
             [
-
-                'students' =>
-                    $repository
-                        ->search($query),
-
+                'students' => $students,
                 'searchForm' => $form->createView(),
 
             ]
