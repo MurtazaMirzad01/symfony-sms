@@ -9,7 +9,7 @@ use App\Repository\StudentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use App\Service\Student\StudentSummaryService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -89,10 +89,17 @@ final class StudentController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_student_show', methods: ['GET'])]
-    public function show(Student $student): Response
+    public function show(
+        Student $student,
+        StudentSummaryService $service,
+    ): Response
     {
-        return $this->render('student/show.html.twig', [
-            'student' => $student,
+        return $this->render(
+            'student/show.html.twig',
+            [
+                'student' =>
+                        $service
+                            ->create($student)
         ]);
     }
 
