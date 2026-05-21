@@ -73,7 +73,6 @@ final class StudentController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
-        EventDispatcherInterface $dispatcher
     ): Response
     {
         $student = new Student();
@@ -83,12 +82,6 @@ final class StudentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($student);
             $entityManager->flush();
-
-            $dispatcher->dispatch(
-                new StudentCreatedEvent(
-                    $student
-                )
-            );
 
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
         }

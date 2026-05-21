@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\EventListener\StudentEntityListener;
 use App\Repository\StudentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
