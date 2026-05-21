@@ -28,3 +28,8 @@ services:
                 event: postPersist,
                 entity: App\Entity\Student,
             }
+            - {
+                  name: doctrine.orm.entity_listener,
+                  event: postRemove,
+                  entity: App\Entity\Student,
+            }
