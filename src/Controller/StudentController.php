@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Student;
-use App\Event\StudentDeletedEvent;
 use App\Form\StudentType;
 use App\Form\StudentSearchType;
 use App\Repository\StudentRepository;
@@ -15,10 +14,10 @@ use App\Service\Student\StudentSummaryService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Event\StudentCreatedEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/')]
+#[IsGranted('ROLE_USER')]
 final class StudentController extends AbstractController
 {
     #[Route(
