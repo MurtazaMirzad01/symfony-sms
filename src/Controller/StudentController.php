@@ -76,6 +76,10 @@ final class StudentController extends AbstractController
     ): Response
     {
         $student = new Student();
+        $this->denyAccessUnlessGranted(
+            StudentVoter::ADD,
+            $student
+        );
         $form = $this->createForm(StudentType::class, $student);
         $form->handleRequest($request);
 

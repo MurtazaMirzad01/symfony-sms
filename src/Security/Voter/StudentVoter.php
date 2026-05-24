@@ -17,6 +17,8 @@ final class StudentVoter extends Voter
     public const DELETE =
         'STUDENT_DELETE';
 
+    public const ADD = 'STUDENT_ADD';
+
     public function __construct(
         private readonly Security $security
     ) {
@@ -25,7 +27,13 @@ final class StudentVoter extends Voter
     protected function supports(
         string $attribute,
         mixed $subject
+
     ): bool {
+
+        if ($attribute === self::ADD) {
+            return true;
+        }
+
 
         return
             $subject instanceof Student
@@ -37,7 +45,7 @@ final class StudentVoter extends Voter
 
                 [
                     self::EDIT,
-                    self::DELETE
+                    self::DELETE,
                 ]
             );
     }
@@ -56,13 +64,19 @@ final class StudentVoter extends Voter
 
             return false;
         }
+        if ($this->security->isGranted('ROLE_ADMIN')){
+                return true;
+            };
 
-        return
-            in_array(
-                'ROLE_ADMIN',
+        if ($this->security->isGranted('ROLE_TEACHER')){
+            return match ($attribute) {
+                self::ADD,
+                self::EDIT => true,
+                default => false,
+            };
+        }
 
-                $user
-                    ->getRoles()
-            );
+        return false;
+
     }
 }
