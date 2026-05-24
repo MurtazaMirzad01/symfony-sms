@@ -28,13 +28,13 @@ class CreateUserCommand extends Command
     {
        $user= new User();
        $user->setEmail(
-           'admin@test.com'
+           'guest@test.com'
        );
-       $user->setRoles(['ROLE_ADMIN']);
+       $user->setRoles(['ROLE_GUEST']);
        $user->setPassword(
            $this->hasher->hashPassword(
                $user,
-               'admin@123'
+               'guest@123'
            )
        );
 
