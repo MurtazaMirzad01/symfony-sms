@@ -7,6 +7,7 @@ use App\Event\StudentDeletedEvent;
 use App\Form\StudentType;
 use App\Form\StudentSearchType;
 use App\Repository\StudentRepository;
+use App\Security\Voter\StudentVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -110,6 +111,11 @@ final class StudentController extends AbstractController
     #[Route('/{id}/edit', name: 'app_student_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Student $student, EntityManagerInterface $entityManager): Response
     {
+
+        $this->denyAccessUnlessGranted(
+            StudentVoter::EDIT,
+            $student
+        );
         $form = $this->createForm(StudentType::class, $student);
         $form->handleRequest($request);
 
@@ -134,6 +140,10 @@ final class StudentController extends AbstractController
        EntityManagerInterface $entityManager,
     ): Response
     {
+        $this->denyAccessUnlessGranted(
+            StudentVoter::DELETE,
+            $student
+        );
         if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($student);
             $entityManager->flush();
