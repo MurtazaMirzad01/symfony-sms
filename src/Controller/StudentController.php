@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\StudentCreateDTO;
 use App\Entity\Student;
 use App\Form\StudentType;
 use App\Form\StudentSearchType;
@@ -15,11 +16,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/')]
 #[IsGranted('ROLE_USER')]
 final class StudentController extends AbstractController
 {
+    public function apiCreate(
+        Request $request,
+        SerializerInterface $serializer,
+    )
+    {
+        $dto = $serializer
+            ->deserialize(
+                $request->getContent(),
+                StudentCreateDTO::class,
+                'json'
+            );
+    }
+
     #[Route(
         '/',
         name: 'app_student_index',
