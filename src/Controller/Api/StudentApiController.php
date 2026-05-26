@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Controller\Api;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
+use App\DTO\StudentCreateDTO;
+use App\Service\StudentService;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
+#[Route('/api/students')]
+final class StudentApiController extends AbstractController
+{
+    #[Route('', methods: ['POST'])]
+   public function create(
+       Request $request,
+        SerializerInterface $serializer,
+        StudentService $service,
+       ValidatorInterface $validator
+    ) : JsonResponse
+    {
+        $dto = $serializer->deserialize($request->getContent(), StudentCreateDTO::class, 'json');
+        $errors = $validator->validate($dto);
+        if (count($errors) > 0) {
+            return $this->json((string)$errors, 400);
+        }
+        $student = $service->create($dto);
+        return  $this->json([
+            'message' => 'Student created',
+            'student' => [
+                'name' => $student->getName(),
+                'email' => $student->getEmail(),
+            ],
+        ],
+            201
+        );
+    }
+}

@@ -41,9 +41,8 @@ class Student
     )]
     private ?string $email = null;
 
-    #[ORM\Column(length: 20)]
-    #[Assert\NotBlank(
-        message: 'Phone is required'
+    #[ORM\Column(
+        nullable: true
     )]
     #[Assert\Regex(
         pattern: '/^(\\+93|0)?7[0-9]{8}$/',
