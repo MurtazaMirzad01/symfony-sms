@@ -6,6 +6,7 @@ use App\EventListener\StudentEntityListener;
 use App\Repository\StudentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
@@ -20,6 +21,9 @@ class Student
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        ['student:list']
+    )]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -30,6 +34,12 @@ class Student
         min: 3,
         minMessage: 'Name must be at least {{ limit }} characters'
     )]
+    #[Groups(
+        [
+            'student:list',
+            'student:detail'
+        ]
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -38,6 +48,12 @@ class Student
     )]
     #[Assert\Email(
         message: 'Please enter a valid email'
+    )]
+    #[Groups(
+        [
+            'student:list',
+            'student:detail'
+        ]
     )]
     private ?string $email = null;
 
@@ -54,9 +70,13 @@ class Student
         minMessage: 'Phone number is too short',
         maxMessage: 'Phone number is too long'
     )]
+    #[Groups(["student.detail"])]
     private ?string $phone = null;
 
     #[ORM\Column]
+    #[Groups(
+        ['student:detail']
+    )]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int

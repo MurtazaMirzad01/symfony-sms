@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Student;
+use App\Repository\StudentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use App\DTO\StudentCreateDTO;
@@ -36,6 +38,78 @@ final class StudentApiController extends AbstractController
             ],
         ],
             201
+        );
+    }
+
+    #[Route(
+        '',
+        methods:['GET']
+    )]
+    public function index(
+
+        StudentRepository $repo
+
+    ): JsonResponse
+    {
+
+        return $this->json(
+
+            $repo
+                ->findAll(),
+
+            200,
+
+            [],
+
+            [
+
+                'groups' =>
+
+                    [
+
+                        'student:list'
+
+                    ]
+
+            ]
+
+        );
+    }
+
+    #[Route(
+
+        '/{id}',
+
+        methods:['GET']
+
+    )]
+    public function show(
+
+        Student $student
+
+    ): JsonResponse
+    {
+
+        return $this->json(
+
+            $student,
+
+            200,
+
+            [],
+
+            [
+
+                'groups'=>
+
+                    [
+
+                        'student:detail'
+
+                    ]
+
+            ]
+
         );
     }
 }
