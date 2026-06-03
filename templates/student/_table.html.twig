@@ -20,7 +20,7 @@
             <td>
                 <a
                     class="btn btn-sm btn-info"
-                    href="{{ path('app_student_show', {'id': student.id}) }}"
+                    href="{{ path('app_student_show', {'_locale': app.request.locale,'id': student.id}) }}"
                 >{{ 'show'|trans }}</a>
 
                 {% if is_granted(
@@ -30,7 +30,8 @@
                 %}
                 <a
                     class="btn btn-sm btn-warning"
-                    href="{{ path('app_student_edit', {'id': student.id}) }}"
+                    href="{{ path('app_student_edit', {'id': student.id, '_locale': app.request.locale
+                    }) }}"
                 >{{ 'edit'|trans }}</a>
                 {% endif %}
                 {% if is_granted(

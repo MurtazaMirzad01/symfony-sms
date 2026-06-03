@@ -18,7 +18,10 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/')]
+#[Route(
+    '/{_locale}',
+    requirements: ['_locale' => 'en|fa']
+)]
 #[IsGranted('ROLE_USER')]
 final class StudentController extends AbstractController
 {
@@ -36,7 +39,7 @@ final class StudentController extends AbstractController
     }
 
     #[Route(
-        '/{_locale}/students',
+        '/students',
         name: 'student_index'
     )]
 
@@ -107,7 +110,7 @@ final class StudentController extends AbstractController
             $entityManager->persist($student);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_student_index', ['_locale' => $request->getLocale()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('student/new.html.twig', [
@@ -148,7 +151,7 @@ final class StudentController extends AbstractController
             $this->addFlash('warning', 'Warning');
 
 
-            return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_student_index', ['_locale' => $request->getLocale()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('student/edit.html.twig', [
@@ -171,6 +174,6 @@ final class StudentController extends AbstractController
             $entityManager->remove($student);
             $entityManager->flush();
         }
-        return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_student_index', ['_locale' => $request->getLocale()], Response::HTTP_SEE_OTHER);
     }
 }

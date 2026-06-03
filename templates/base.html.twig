@@ -60,8 +60,8 @@
 
                {% endif %}
            </div>
-           <a href="{{ path('student_index', {_locale: 'en'}) }}">EN</a>
-           <a href="{{ path('student_index', {_locale: 'fa'}) }}">FA</a>
+           <a href="{{ path(app.current_route, app.current_route_parameters|merge({_locale: 'en'})) }}">EN</a>
+           <a href="{{ path( app.current_route, app.current_route_parameters|merge({_locale: 'fa'})) }}">FA</a>
        </div>
 
    </nav>
