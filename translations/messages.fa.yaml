@@ -1,0 +1,12 @@
+student:
+    app: 'برنامه مدیدرت شاگردان'
+    list: "دانش ‌آموزان"
+    create: "ایجاد دانش ‌آموز"
+    search: "جستجو"
+    email: "ایمیل"
+    student detail: 'جزیات دانس آموز'
+
+back to list: 'برگشت به لیست'
+create Student: 'شاگرد جدید'
+back: 'برگشت'
+delete: 'حذف'

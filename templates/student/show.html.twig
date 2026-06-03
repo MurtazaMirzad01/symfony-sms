@@ -3,7 +3,7 @@
 {% block title %}Student Detail{% endblock %}
 
 {% block body %}
-    <h1>Student Detail</h1>
+    <h1>{{ 'student.student detail'|trans }}</h1>
 
     <table class="table">
         <tbody>
@@ -30,7 +30,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_student_index') }}" class="btn btn-info">back to list</a>
+    <a href="{{ path('app_student_index') }}" class="btn btn-info">{{ 'back to list'|trans }}</a>
     {% if is_granted(
         'STUDENT_EDIT',
         student

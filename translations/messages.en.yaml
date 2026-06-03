@@ -1,0 +1,13 @@
+student:
+    app: 'Students app'
+    list: "Students"
+    create: "Create Student"
+    search: "Search"
+    email: "Email"
+    student detail: 'student detail'
+
+
+back to list: 'back to list'
+create Student: 'Create Student'
+back: 'Back'
+delete: 'Delete'
