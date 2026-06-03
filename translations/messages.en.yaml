@@ -1,7 +1,7 @@
 student:
     app: 'Students app'
     list: "Students"
-    create: "Create Student"
+    add student: "Add Student"
     search: "Search"
     email: "Email"
     student detail: 'student detail'
@@ -11,3 +11,5 @@ back to list: 'back to list'
 create Student: 'Create Student'
 back: 'Back'
 delete: 'Delete'
+show: 'Show'
+edit: 'Edit'

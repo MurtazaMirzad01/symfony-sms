@@ -21,7 +21,7 @@
                 <a
                     class="btn btn-sm btn-info"
                     href="{{ path('app_student_show', {'id': student.id}) }}"
-                >show</a>
+                >{{ 'show'|trans }}</a>
 
                 {% if is_granted(
                     'STUDENT_EDIT',
@@ -31,7 +31,7 @@
                 <a
                     class="btn btn-sm btn-warning"
                     href="{{ path('app_student_edit', {'id': student.id}) }}"
-                >edit</a>
+                >{{ 'edit'|trans }}</a>
                 {% endif %}
                 {% if is_granted(
                     'STUDENT_DELETE',

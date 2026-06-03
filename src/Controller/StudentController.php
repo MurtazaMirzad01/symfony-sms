@@ -36,6 +36,11 @@ final class StudentController extends AbstractController
     }
 
     #[Route(
+        '/{_locale}/students',
+        name: 'student_index'
+    )]
+
+    #[Route(
         '/',
         name: 'app_student_index',
         methods: ['GET']

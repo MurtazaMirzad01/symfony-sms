@@ -1,7 +1,7 @@
 student:
-    app: 'برنامه مدیدرت شاگردان'
+    app: 'برنامه مدیرت شاگردان'
     list: "دانش ‌آموزان"
-    create: "ایجاد دانش ‌آموز"
+    add student: "ایجاد دانش ‌آموز"
     search: "جستجو"
     email: "ایمیل"
     student detail: 'جزیات دانس آموز'
@@ -10,3 +10,5 @@ back to list: 'برگشت به لیست'
 create Student: 'شاگرد جدید'
 back: 'برگشت'
 delete: 'حذف'
+show: 'نمایش'
+edit: 'تصحیح'
