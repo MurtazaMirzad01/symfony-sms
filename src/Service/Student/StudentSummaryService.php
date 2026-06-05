@@ -22,6 +22,7 @@ class StudentSummaryService
                 $student
                     ->getCreatedAt()
                         ->format('Y-m-d'),
+            imageName: $student->getImageName()
         );
     }
 }

@@ -79,6 +79,12 @@ class Student
     )]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column]
+    #[Groups(
+        ['student:detail']
+    )]
+    private ?string $imageName = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -128,6 +134,17 @@ class Student
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(string $imageName): static
+    {
+        $this->imageName = $imageName;
 
         return $this;
     }

@@ -8,6 +8,7 @@ use App\Form\StudentType;
 use App\Form\StudentSearchType;
 use App\Repository\StudentRepository;
 use App\Security\Voter\StudentVoter;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -96,6 +97,7 @@ final class StudentController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
+        FileUploader $uploader
     ): Response
     {
         $student = new Student();
@@ -107,6 +109,19 @@ final class StudentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile =
+                $form->get('image')
+                    ->getData();
+            if ($imageFile) {
+                $filename =
+                    $uploader->upload(
+                        $imageFile
+                    );
+
+                $student->setImageName(
+                    $filename
+                );
+            }
             $entityManager->persist($student);
             $entityManager->flush();
 

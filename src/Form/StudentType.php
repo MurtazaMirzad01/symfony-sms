@@ -6,7 +6,8 @@ use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 class StudentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -14,7 +15,28 @@ class StudentType extends AbstractType
         $builder
             ->add('name')
             ->add('email')
-            ->add('phone');
+            ->add('phone')
+            ->add(
+                'image',
+                FileType::class,
+                [
+                    'mapped' => false,
+
+                    'constraints' => [
+
+                        new File(
+                            maxSize: '2M',
+
+                            mimeTypes: [
+
+                                'image/jpeg',
+                                'image/png',
+                                'image/webp'
+                            ]
+                        )
+                    ]
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

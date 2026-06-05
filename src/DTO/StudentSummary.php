@@ -10,6 +10,8 @@ readonly class StudentSummary
         public string $email,
         public ?string $phone,
         public string $createdAt,
+        public ?string $imageName,
+
     )
     {
 

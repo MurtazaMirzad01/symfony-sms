@@ -27,6 +27,21 @@
                 <th>CreatedAt</th>
                 <td>{{ student.createdAt ? student.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Image</th>
+                <td>  {% if student.imageName %}
+
+                <img
+                    src="{{ asset(
+                        'uploads/students/' ~
+                        student.imageName
+                    ) }}"
+                    width="60"
+                    class="rounded"
+                    alt="student image"/>
+
+                {% endif %}</td>
+            </tr>
         </tbody>
     </table>
 
