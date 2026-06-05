@@ -9,6 +9,8 @@ use App\Form\StudentSearchType;
 use App\Repository\StudentRepository;
 use App\Security\Voter\StudentVoter;
 use App\Service\FileUploader;
+use App\Service\StudentImageManager;
+use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -96,8 +98,8 @@ final class StudentController extends AbstractController
     #[Route('/new', name: 'app_student_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        EntityManagerInterface $entityManager,
-        FileUploader $uploader
+        StudentService $studentService,
+        StudentImageManager $imageManager
     ): Response
     {
         $student = new Student();
@@ -109,22 +111,17 @@ final class StudentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageFile =
+            $image =
                 $form->get('image')
                     ->getData();
-            if ($imageFile) {
-                $filename =
-                    $uploader->upload(
-                        $imageFile
+            if ($image) {
+               $imageManager
+                    ->uploadImage(
+                        $student,
+                        $image,
                     );
-
-                $student->setImageName(
-                    $filename
-                );
             }
-            $entityManager->persist($student);
-            $entityManager->flush();
-
+            $studentService->save($student);
             return $this->redirectToRoute('app_student_index', ['_locale' => $request->getLocale()], Response::HTTP_SEE_OTHER);
         }
 
@@ -150,7 +147,12 @@ final class StudentController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_student_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Student $student, EntityManagerInterface $entityManager): Response
+    public function edit(
+        Request $request,
+        Student $student,
+        StudentImageManager $imageManager,
+        StudentService $studentService
+    ): Response
     {
 
         $this->denyAccessUnlessGranted(
@@ -161,8 +163,15 @@ final class StudentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
+            $image = $form->get('image')->getData();
+            if ($image) {
+                $imageManager
+                    ->replaceImage(
+                    $student,
+                    $image,
+                );
+            }
+            $studentService->save($student);
             $this->addFlash('warning', 'Warning');
 
 
@@ -177,8 +186,7 @@ final class StudentController extends AbstractController
 
     #[Route('/{id}', name: 'app_student_delete', methods: ['POST'])]
     public function delete(Request $request,
-       Student $student,
-       EntityManagerInterface $entityManager,
+       Student $student, StudentService $studentService,
     ): Response
     {
         $this->denyAccessUnlessGranted(
@@ -186,8 +194,7 @@ final class StudentController extends AbstractController
             $student
         );
         if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($student);
-            $entityManager->flush();
+            $studentService->delete($student);
         }
         return $this->redirectToRoute('app_student_index', ['_locale' => $request->getLocale()], Response::HTTP_SEE_OTHER);
     }

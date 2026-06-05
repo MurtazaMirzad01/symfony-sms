@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class StudentService
 {
     public function __construct(
-        private EntityManagerInterface $em
+        private readonly EntityManagerInterface $em
     )
     {
 
@@ -24,6 +24,18 @@ class StudentService
         $this->em->persist($student);
         $this->em->flush();
         return $student;
+    }
+    public function save(
+        Student $student
+    ): void
+    {
+     $this->em->persist($student);
+     $this->em->flush();
+    }
+    public function delete(Student $student): void
+    {
+        $this->em->remove($student);
+        $this->em->flush();
     }
 
 }
