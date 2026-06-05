@@ -18,4 +18,25 @@ class FileUploader
         $file->move($this->uploadDir, $filename);
         return $filename;
     }
+    public function delete(
+        ?string $filename
+    ): void {
+
+        if (
+            !$filename
+        ) {
+            return;
+        }
+
+        $path =
+            $this->uploadDir
+            . '/'
+            . $filename;
+
+        if (
+            file_exists($path)
+        ) {
+            unlink($path);
+        }
+    }
 }
